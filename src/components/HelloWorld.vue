@@ -31,10 +31,30 @@
 </template>
 
 <script>
+
+import Web3 from 'web3';
+
+const web3 = new Web3(
+  new Web3.providers.HttpProvider('https://kovan.infura.io/v3/39009bec93694f98947fdfb1cffb2e30')
+);
+
 export default {
   name: 'HelloWorld',
   props: {
     msg: String
+  },
+  data() {
+    return {
+      address: '0x07d326444Af98b84D40FD36F655d3B173a9a0C26'
+    }
+  },
+  created() {
+    web3.eth.getBalance(this.address, (err, wei) => {
+      let balance = web3.utils.fromWei(wei, 'ether');
+
+      console.log('hello eth world!');
+      console.log(balance);
+    })
   }
 }
 </script>
