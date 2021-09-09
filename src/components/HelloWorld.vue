@@ -1,10 +1,6 @@
 <template>
   <div>
     <h1>Ethereum Playground</h1>
-    <ul>
-      <li>Address: {{ address }}</li>
-      <li>Balance: {{ balance }} ETH</li>
-    </ul>
 
     <h2>ERC-20 Token Contract</h2>
     <ul>
@@ -18,7 +14,7 @@
       <h2 class="text-2xl mb-8">Accounts</h2>
 
       <ul role="list" class="-my-6 divide-y divide-gray-200">
-        <li v-for='(account, index) in accounts' :key='account.address' class="py-6 flex">
+        <li v-for='(account, index) in accounts' :key='account.address + "-" + account.balance' class="py-6 flex">
           <div class="flex-shrink-0 w-24 h-24 border border-gray-200 rounded-md overflow-hidden">
             <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=4&w=256&h=256&q=60" class="w-full h-full object-center object-cover">
           </div>
@@ -30,8 +26,8 @@
                     {{ account.name }}
                   </a>
                 </h3>
-                <p class="ml-4">
-                  ETH 90.00
+                <p v-if="account.balance" class="ml-4">
+                  {{ account.balance }} ETH
                 </p>
               </div>
               <p class="mt-1 text-sm text-gray-500">
@@ -74,25 +70,32 @@ const erc20Abi = [{"constant":true,"inputs":[],"name":"mintingFinished","outputs
 export default {
   name: 'HelloWorld',
   props: {
-    address: String,
     erc20Address: String
   },
   data() {
     return {
-      balance: 0,
       erc20Name: '',
       erc20Symbol: '',
       erc20TotalSupply: '',
+      accountsRaw: [],
       accounts: []
     }
   },
   watch: {
-    accounts: {
+    accountsRaw: {
       handler() {
-        console.log('accounts array changed!');
         // this wouldn't be secure enough for prod => the accounts would have to be encrypted
         // because localStorage is not a safe place to store private keys
-        window.localStorage.setItem('accounts', JSON.stringify(this.accounts));
+        window.localStorage.setItem('accounts', JSON.stringify(this.accountsRaw));
+
+        // get balance from blockchain for each account
+        this.accounts = [...this.accountsRaw];
+
+        this.accounts.forEach((account) => {
+          web3.eth.getBalance(account.address, (err, wei) => {
+            account.balance = Number.parseFloat(web3.utils.fromWei(wei, 'ether')).toPrecision(2);
+          });
+        });
       },
       deep: true,
     },
@@ -100,18 +103,16 @@ export default {
   methods: {
     addAccount() {
       const newAccount = web3.eth.accounts.create();
-      newAccount.name = `My Account ${this.accounts.length + 1}`;
-      this.accounts = [...this.accounts, newAccount];
+      newAccount.name = `My Account ${this.accountsRaw.length + 1}`;
+      this.accountsRaw = [...this.accountsRaw, newAccount];
     },
     removeAccount(clickedIndex) {
       if (window.confirm('Are you sure? You will loose access to your funds.')) {
-        this.accounts = this.accounts.filter((account, accountIndex) => accountIndex !== clickedIndex );
+        this.accountsRaw = this.accountsRaw.filter((account, accountIndex) => accountIndex !== clickedIndex );
       }
     }
   },
   created() {
-    web3.eth.getBalance(this.address, (err, wei) => (this.balance = web3.utils.fromWei(wei, 'ether')));
-
     const smartContract = new web3.eth.Contract(erc20Abi, this.erc20Address);
 
     // get all methods: console.log(smartContract.methods);
@@ -120,7 +121,7 @@ export default {
     smartContract.methods.totalSupply().call((err, result) => (this.erc20TotalSupply = result));
 
     if (window.localStorage.getItem('accounts')) {
-      this.accounts = JSON.parse(window.localStorage.getItem('accounts'));
+      this.accountsRaw = JSON.parse(window.localStorage.getItem('accounts'));
     }
   }
 }

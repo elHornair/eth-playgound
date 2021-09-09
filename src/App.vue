@@ -1,6 +1,6 @@
 <template>
   <div class="max-w-container mx-auto px-4 sm:px-6 lg:px-8 py-20 space-y-20">
-    <HelloWorld address="0x07d326444Af98b84D40FD36F655d3B173a9a0C26" erc20Address="0xf894289f63b0b365485cee34aa50681f295f84b4"/>
+    <HelloWorld erc20Address="0xf894289f63b0b365485cee34aa50681f295f84b4"/>
   </div>
 </template>
 
