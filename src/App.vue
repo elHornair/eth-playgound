@@ -1,5 +1,5 @@
 <template>
-  <HelloWorld address="0x07d326444Af98b84D40FD36F655d3B173a9a0C26"/>
+  <HelloWorld address="0x07d326444Af98b84D40FD36F655d3B173a9a0C26" erc20Address="0xf894289f63b0b365485cee34aa50681f295f84b4"/>
 </template>
 
 <script>
