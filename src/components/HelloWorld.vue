@@ -1,5 +1,5 @@
 <template>
-  <div class="hello">
+  <div>
     <h1>Ethereum Playground</h1>
     <ul>
       <li>Address: {{ address }}</li>
@@ -14,13 +14,49 @@
       <li>Total Supply: {{ erc20TotalSupply }}</li>
     </ul>
 
-    <h2>Accounts</h2>
-    <ul>
-      <li v-for='account in accounts' :key='account.address'>
-        {{ account.address }} ({{ account.privateKey }})
-      </li>
-    </ul>
-    <button @click="addAccount">AddAccount</button>
+    <div class="max-w-screen-sm shadow overflow-hidden border-b border-gray-200 sm:rounded-lg px-6 py-4 bg-white text-left">
+      <h2 class="text-2xl mb-8">Accounts</h2>
+
+      <ul role="list" class="-my-6 divide-y divide-gray-200">
+        <li v-for='account in accounts' :key='account.address' class="py-6 flex">
+          <div class="flex-shrink-0 w-24 h-24 border border-gray-200 rounded-md overflow-hidden">
+            <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=4&w=256&h=256&q=60" class="w-full h-full object-center object-cover">
+          </div>
+          <div class="ml-4 flex-1 flex flex-col">
+            <div>
+              <div class="flex justify-between text-base font-medium text-gray-900">
+                <h3>
+                  <a href="#">
+                    {{ account.address }}
+                  </a>
+                </h3>
+                <p class="ml-4">
+                  ETH 90.00
+                </p>
+              </div>
+              <p class="mt-1 text-sm text-gray-500">
+                Primary Info
+              </p>
+            </div>
+            <div class="flex-1 flex items-end justify-between text-sm">
+              <p class="text-gray-500">
+                Secondary Info
+              </p>
+              <div class="flex">
+                <button type="button" class="font-medium text-indigo-600 hover:text-indigo-500">Remove</button>
+              </div>
+            </div>
+          </div>
+        </li>
+      </ul>
+
+      <button
+        class="mt-8 float-right bg-white py-2 px-3 border border-gray-300 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+        @click="addAccount"
+      >
+        Add Account
+      </button>
+    </div>
   </div>
 </template>
 
@@ -81,14 +117,3 @@ export default {
   }
 }
 </script>
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  margin: 0 10px;
-}
-</style>
