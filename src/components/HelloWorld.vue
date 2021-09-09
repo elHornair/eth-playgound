@@ -18,7 +18,7 @@
       <h2 class="text-2xl mb-8">Accounts</h2>
 
       <ul role="list" class="-my-6 divide-y divide-gray-200">
-        <li v-for='account in accounts' :key='account.address' class="py-6 flex">
+        <li v-for='(account, index) in accounts' :key='account.address' class="py-6 flex">
           <div class="flex-shrink-0 w-24 h-24 border border-gray-200 rounded-md overflow-hidden">
             <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=4&w=256&h=256&q=60" class="w-full h-full object-center object-cover">
           </div>
@@ -27,7 +27,7 @@
               <div class="flex justify-between text-base font-medium text-gray-900">
                 <h3>
                   <a href="#">
-                    {{ account.address }}
+                    {{ account.name }}
                   </a>
                 </h3>
                 <p class="ml-4">
@@ -35,7 +35,7 @@
                 </p>
               </div>
               <p class="mt-1 text-sm text-gray-500">
-                Primary Info
+                {{ account.address }}
               </p>
             </div>
             <div class="flex-1 flex items-end justify-between text-sm">
@@ -43,7 +43,7 @@
                 Secondary Info
               </p>
               <div class="flex">
-                <button type="button" class="font-medium text-indigo-600 hover:text-indigo-500">Remove</button>
+                <button type="button" class="font-medium text-indigo-600 hover:text-indigo-500" @click="removeAccount(index)">Remove</button>
               </div>
             </div>
           </div>
@@ -98,7 +98,14 @@ export default {
   },
   methods: {
     addAccount() {
-      this.accounts = [...this.accounts, web3.eth.accounts.create()];
+      const newAccount = web3.eth.accounts.create();
+      newAccount.name = `My Account ${this.accounts.length + 1}`;
+      this.accounts = [...this.accounts, newAccount];
+    },
+    removeAccount(clickedIndex) {
+      if (window.confirm('Are you sure? You will loose access to your funds.')) {
+        this.accounts = this.accounts.filter((account, accountIndex) => accountIndex !== clickedIndex );
+      }
     }
   },
   created() {
