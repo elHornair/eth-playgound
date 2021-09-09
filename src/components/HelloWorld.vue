@@ -13,6 +13,14 @@
       <li>Symbol: {{ erc20Symbol }}</li>
       <li>Total Supply: {{ erc20TotalSupply }}</li>
     </ul>
+
+    <h2>Accounts</h2>
+    <ul>
+      <li v-for='account in accounts' :key='account.address'>
+        {{ account.address }} ({{ account.privateKey }})
+      </li>
+    </ul>
+    <button @click="addAccount">AddAccount</button>
   </div>
 </template>
 
@@ -34,10 +42,27 @@ export default {
   },
   data() {
     return {
-      balance: Number,
-      erc20Name: String,
-      erc20Symbol: String,
-      erc20TotalSupply: String
+      balance: 0,
+      erc20Name: '',
+      erc20Symbol: '',
+      erc20TotalSupply: '',
+      accounts: []
+    }
+  },
+  watch: {
+    accounts: {
+      handler() {
+        console.log('accounts array changed!');
+        // this wouldn't be secure enough for prod => the accounts would have to be encrypted
+        // because localStorage is not a safe place to store private keys
+        window.localStorage.setItem('accounts', JSON.stringify(this.accounts));
+      },
+      deep: true,
+    },
+  },
+  methods: {
+    addAccount() {
+      this.accounts = [...this.accounts, web3.eth.accounts.create()];
     }
   },
   created() {
@@ -49,6 +74,10 @@ export default {
     smartContract.methods.name().call((err, result) => (this.erc20Name = result));
     smartContract.methods.symbol().call((err, result) => (this.erc20Symbol = result));
     smartContract.methods.totalSupply().call((err, result) => (this.erc20TotalSupply = result));
+
+    if (window.localStorage.getItem('accounts')) {
+      this.accounts = JSON.parse(window.localStorage.getItem('accounts'));
+    }
   }
 }
 </script>
