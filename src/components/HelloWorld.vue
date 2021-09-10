@@ -10,7 +10,7 @@
       <li>Total Supply: {{ erc20TotalSupply }}</li>
     </ul>
 
-    <NewTransaction v-if="newTransactionData" :web3="web3" v-bind="newTransactionData.account"></NewTransaction>
+    <NewTransaction v-if="newTransactionData" @new-transaction-finished="handleNewTransactionFinished" :web3="web3" v-bind="newTransactionData.account"></NewTransaction>
 
     <div class="max-w-screen-sm shadow overflow-hidden border-b border-gray-200 sm:rounded-lg px-6 py-4 bg-white text-left">
       <h2 class="text-2xl mb-8">Accounts</h2>
@@ -120,6 +120,9 @@ export default {
       this.newTransactionData = {
         account: this.accountsRaw[clickedIndex]
       }
+    },
+    handleNewTransactionFinished() {
+      this.newTransactionData = null;
     }
   },
   created() {
