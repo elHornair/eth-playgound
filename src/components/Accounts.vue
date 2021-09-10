@@ -1,6 +1,6 @@
 <template>
   <div class="box">
-    <h2 class="box__title">Accounts</h2>
+    <h2 class="box__title">My Accounts</h2>
 
     <ul role="list" class="-my-6 divide-y divide-gray-200">
       <li
@@ -30,9 +30,13 @@
               class="flex justify-between text-base font-medium text-gray-900"
             >
               <h3>
-                <a href="#">
-                  {{ account.name }}
-                </a>
+                <router-link
+                  :to="{
+                    name: 'account',
+                    params: { address: account.address },
+                  }"
+                  >{{ account.name }}</router-link
+                >
               </h3>
               <p v-if="account.balance" class="ml-4">
                 {{ account.balance }} ETH
