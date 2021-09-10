@@ -1,6 +1,6 @@
 <template>
-  <div class="mb-4 max-w-screen-sm shadow overflow-hidden border-b border-gray-200 sm:rounded-lg px-6 py-4 bg-white text-left">
-    <h2 class="text-2xl mb-8">New Transaction</h2>
+  <div class="box">
+    <h2 class="box__title">New Transaction</h2>
 
     <form action="#" method="POST" @submit.prevent="handleFormSubmit">
       <div class="grid grid-cols-6 gap-6">

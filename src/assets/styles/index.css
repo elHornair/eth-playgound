@@ -3,5 +3,13 @@
 @tailwind utilities;
 
 .link-container > a {
-    @apply text-indigo-600 hover:text-indigo-500;
+  @apply text-indigo-600 hover:text-indigo-500;
+}
+
+.box {
+  @apply max-w-screen-sm shadow overflow-hidden border-b border-gray-200 sm:rounded-lg px-6 py-4 bg-white text-left;
+}
+
+.box__title {
+  @apply text-2xl mb-8;
 }

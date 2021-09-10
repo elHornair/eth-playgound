@@ -1,6 +1,6 @@
 <template>
-  <div class="max-w-screen-sm shadow overflow-hidden border-b border-gray-200 sm:rounded-lg px-6 py-4 bg-white text-left">
-    <h2 class="text-2xl mb-8">Accounts</h2>
+  <div class="box">
+    <h2 class="box__title">Accounts</h2>
 
     <ul role="list" class="-my-6 divide-y divide-gray-200">
       <li v-for='(account, index) in accounts' :key='account.address + "-" + account.balance' class="py-6 flex">
