@@ -13,7 +13,7 @@
       </p>
     </div>
 
-    <HelloWorld erc20Address="0xf894289f63b0b365485cee34aa50681f295f84b4"/>
+    <HelloWorld />
   </div>
 </template>
 
