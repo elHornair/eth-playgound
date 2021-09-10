@@ -2,6 +2,30 @@
 @tailwind components;
 @tailwind utilities;
 
+.router-link--mobile {
+  @apply block px-3 py-2 rounded-md text-base font-medium;
+}
+
+.router-link--mobile:not(.router-link--active) {
+  @apply text-gray-300 hover:bg-gray-700 hover:text-white;
+}
+
+.router-link--mobile.router-link--active {
+  @apply bg-gray-900 text-white;
+}
+
+.router-link--sm {
+  @apply px-3 py-2 rounded-md text-sm font-medium;
+}
+
+.router-link--sm:not(.router-link--active) {
+  @apply text-gray-300 hover:bg-gray-700 hover:text-white;
+}
+
+.router-link--sm.router-link--active {
+  @apply bg-gray-900 text-white;
+}
+
 .link-container > a {
   @apply text-indigo-600 hover:text-indigo-500;
 }
