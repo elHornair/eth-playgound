@@ -1,6 +1,6 @@
 <template>
-  <div class="max-w-container mx-auto px-4 sm:px-6 lg:px-8 space-y-20">
-    <div class="lg:text-center pt-10">
+  <div class="space-y-10">
+    <div class="lg:text-center">
       <h1
         class="text-base text-indigo-600 font-semibold tracking-wide uppercase"
       >

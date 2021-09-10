@@ -1,5 +1,5 @@
 <template>
-  <div class="max-w-container mx-auto px-4 sm:px-6 lg:px-8 space-y-20">
+  <div class="space-y-10">
     <NewTransaction
       v-if="newTransactionData"
       :web3="web3"
