@@ -16,14 +16,17 @@
   "devDependencies": {
     "@tailwindcss/postcss7-compat": "^2.2.14",
     "@vue/cli-plugin-babel": "~4.5.0",
-    "@vue/cli-plugin-eslint": "~4.5.0",
+    "@vue/cli-plugin-eslint": "^4.5.13",
     "@vue/cli-service": "~4.5.0",
     "@vue/compiler-sfc": "^3.0.0",
+    "@vue/eslint-config-prettier": "^6.0.0",
     "autoprefixer": "^9.8.6",
     "babel-eslint": "^10.1.0",
     "eslint": "^6.7.2",
+    "eslint-plugin-prettier": "^3.3.1",
     "eslint-plugin-vue": "^7.0.0",
     "postcss": "^7.0.36",
+    "prettier": "^2.2.1",
     "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.2.14"
   },
   "eslintConfig": {
@@ -32,8 +35,10 @@
       "node": true
     },
     "extends": [
+      "plugin:vue/recommended",
+      "eslint:recommended",
       "plugin:vue/vue3-essential",
-      "eslint:recommended"
+      "@vue/prettier"
     ],
     "parserOptions": {
       "parser": "babel-eslint"
