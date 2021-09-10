@@ -4,7 +4,6 @@
       <div class="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
         <div class="relative flex items-center justify-between h-16">
           <div class="absolute inset-y-0 left-0 flex items-center sm:hidden">
-            <!-- Mobile menu button-->
             <button
               type="button"
               class="
@@ -86,6 +85,9 @@
                 <router-link :to="{ name: 'home' }" class="router-link--sm"
                   >Home</router-link
                 >
+                <router-link :to="{ name: 'accounts' }" class="router-link--sm"
+                  >Accounts</router-link
+                >
                 <router-link :to="{ name: 'about' }" class="router-link--sm"
                   >About</router-link
                 >
@@ -110,6 +112,9 @@
         <div class="px-2 pt-2 pb-3 space-y-1">
           <router-link :to="{ name: 'home' }" class="router-link--mobile"
             >Home</router-link
+          >
+          <router-link :to="{ name: 'accounts' }" class="router-link--mobile"
+            >Accounts</router-link
           >
           <router-link :to="{ name: 'about' }" class="router-link--mobile"
             >About</router-link
