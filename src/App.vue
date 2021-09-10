@@ -13,17 +13,46 @@
       </p>
     </div>
 
-    <HelloWorld />
+    <ERC20Box :web3="web3" address="0xf894289f63b0b365485cee34aa50681f295f84b4"></ERC20Box>
+    <NewTransaction v-if="newTransactionData" @new-transaction-finished="handleNewTransactionFinished" :web3="web3" v-bind="newTransactionData.account"></NewTransaction>
+    <Accounts :web3="web3" @new-transaction-requested="handleNewTransactionRequested" />
+
   </div>
 </template>
 
 <script>
-import HelloWorld from "@/components/HelloWorld";
+
+import Web3 from 'web3';
+
+import ERC20Box from "@/components/ERC20Box";
+import Accounts from "@/components/Accounts";
+import NewTransaction from "@/components/NewTransaction";
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    Accounts,
+    ERC20Box,
+    NewTransaction
+  },
+  data() {
+    return {
+      web3: null,
+      newTransactionData: null,
+    }
+  },
+  methods: {
+    handleNewTransactionFinished() {
+      this.newTransactionData = null;
+    },
+    handleNewTransactionRequested(data) {
+      this.newTransactionData = data;
+    }
+  },
+  created() {
+    this.web3 = new Web3(
+        new Web3.providers.HttpProvider('https://kovan.infura.io/v3/39009bec93694f98947fdfb1cffb2e30')
+    );
   }
 }
 </script>
