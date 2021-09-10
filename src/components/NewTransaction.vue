@@ -37,7 +37,7 @@
 <script>
 
 export default {
-  name: 'Transaction',
+  name: 'NewTransaction',
   props: {
     web3: null,
     name: String,

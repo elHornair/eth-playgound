@@ -1,7 +1,5 @@
 <template>
   <div>
-    <h1>Ethereum Playground</h1>
-
     <h2>ERC-20 Token Contract</h2>
     <ul>
       <li>Address: {{ erc20Address }}</li>
