@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router';
+
 import Home from '../views/Home.vue';
 
 const routes = [
@@ -14,13 +15,20 @@ const routes = [
   },
   {
     path: '/accounts',
-    name: 'accounts',
-    component: () => import('../views/Accounts.vue'),
-  },
-  {
-    path: '/accounts/:address',
-    name: 'account',
-    component: () => import('../views/Account.vue'),
+    name: 'accounts-pass-through',
+    component: () => import('../views/RouterPassThrough.vue'),
+    children: [
+      {
+        path: '',
+        name: 'accounts',
+        component: () => import('../views/Accounts.vue'),
+      },
+      {
+        path: ':address',
+        name: 'account',
+        component: () => import('../views/Account.vue'),
+      },
+    ],
   },
 ];
 
