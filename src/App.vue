@@ -124,13 +124,13 @@
     </nav>
 
     <div class="max-w-screen-sm m-auto px-4 sm:px-0 pt-10">
-      <router-view v-slot="{ Component }">
+      <router-view v-slot="{ Component, route }">
         <transition
           name="fade"
           enter-active-class="animate__animated animate__fadeIn animate__faster"
           mode="out-in"
         >
-          <component :is="Component" />
+          <component :is="Component" :key="route.path" />
         </transition>
       </router-view>
     </div>
