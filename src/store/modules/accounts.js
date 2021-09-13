@@ -1,5 +1,10 @@
-// TODO: add constants for the mutations / actions
-// TODO: maybe web3 should be in here and everything should be done through actions?
+import Web3 from 'web3';
+
+const web3 = new Web3(
+  new Web3.providers.HttpProvider(
+    'https://kovan.infura.io/v3/39009bec93694f98947fdfb1cffb2e30'
+  )
+);
 
 const state = () => ({
   all: [],
@@ -17,7 +22,23 @@ const getters = {
   },
 };
 
-const actions = {};
+const actions = {
+  createAccount({ getters, commit }) {
+    const newAccount = web3.eth.accounts.create();
+    newAccount.name = `My Account ${getters.total + 1}`;
+
+    web3.eth.getBalance(newAccount.address, (err, wei) => {
+      newAccount.balance = Number.parseFloat(
+        web3.utils.fromWei(wei, 'ether')
+      ).toPrecision(2);
+
+      commit({
+        type: 'addAccount',
+        newAccount: newAccount,
+      });
+    });
+  },
+};
 
 const mutations = {
   addAccount(state, payload) {

@@ -104,12 +104,6 @@ import { mapGetters } from 'vuex';
 
 export default {
   name: 'Accounts',
-  props: {
-    web3: {
-      type: Object,
-      default: undefined,
-    },
-  },
   computed: {
     ...mapGetters('accounts', {
       accounts: 'all',
@@ -117,34 +111,9 @@ export default {
       getAccountByAddress: 'getByAddress',
     }),
   },
-  created() {
-    this.accounts.forEach((account) => {
-      this.web3.eth.getBalance(account.address, (err, wei) => {
-        this.$store.commit({
-          type: 'accounts/updateAccountBalance',
-          accountAddress: account.address,
-          accountBalance: Number.parseFloat(
-            this.web3.utils.fromWei(wei, 'ether')
-          ).toPrecision(2),
-        });
-      });
-    });
-  },
   methods: {
     addAccount() {
-      const newAccount = this.web3.eth.accounts.create();
-      newAccount.name = `My Account ${this.totalAccounts + 1}`;
-
-      this.web3.eth.getBalance(newAccount.address, (err, wei) => {
-        newAccount.balance = Number.parseFloat(
-          this.web3.utils.fromWei(wei, 'ether')
-        ).toPrecision(2);
-
-        this.$store.commit({
-          type: 'accounts/addAccount',
-          newAccount: newAccount,
-        });
-      });
+      this.$store.dispatch({ type: 'accounts/createAccount' });
     },
     removeAccount(address) {
       if (
