@@ -11,6 +11,8 @@
 </template>
 
 <script>
+import Web3 from 'web3';
+
 const erc20Abi = [
   {
     constant: true,
@@ -213,10 +215,6 @@ const erc20Abi = [
 export default {
   name: 'ERC20Box',
   props: {
-    web3: {
-      type: Object,
-      default: undefined,
-    },
     address: {
       type: String,
       default: undefined,
@@ -224,12 +222,19 @@ export default {
   },
   data() {
     return {
+      web3: undefined,
       tokenName: '',
       tokenSymbol: '',
       tokenTotalSupply: '',
     };
   },
   created() {
+    this.web3 = new Web3(
+      new Web3.providers.HttpProvider(
+        'https://kovan.infura.io/v3/39009bec93694f98947fdfb1cffb2e30'
+      )
+    );
+
     const smartContract = new this.web3.eth.Contract(erc20Abi, this.address);
 
     // get all methods: console.log(smartContract.methods);
