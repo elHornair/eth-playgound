@@ -109,13 +109,11 @@
 </template>
 
 <script>
+import Web3 from 'web3';
+
 export default {
   name: 'NewTransaction',
   props: {
-    web3: {
-      type: Object,
-      default: undefined,
-    },
     name: {
       type: String,
       default: undefined,
@@ -131,9 +129,17 @@ export default {
   },
   data() {
     return {
+      web3: undefined,
       recipient: '',
       amount: 0,
     };
+  },
+  created() {
+    this.web3 = new Web3(
+      new Web3.providers.HttpProvider(
+        'https://kovan.infura.io/v3/39009bec93694f98947fdfb1cffb2e30'
+      )
+    );
   },
   methods: {
     handleAbort() {
