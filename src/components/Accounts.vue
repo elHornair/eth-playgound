@@ -4,7 +4,7 @@
 
     <ul role="list" class="-my-6 divide-y divide-gray-200">
       <li
-        v-for="(account, index) in accounts"
+        v-for="account in accounts"
         :key="account.address + '-' + account.balance"
         class="py-6 flex"
       >
@@ -51,7 +51,7 @@
               <button
                 type="button"
                 class="font-medium text-indigo-600 hover:text-indigo-500"
-                @click="sendFromAccount(index)"
+                @click="sendFromAccount(account.address)"
               >
                 Send
               </button>
@@ -60,7 +60,7 @@
               <button
                 type="button"
                 class="font-medium text-indigo-600 hover:text-indigo-500"
-                @click="removeAccount(index)"
+                @click="removeAccount(account.address)"
               >
                 Remove
               </button>
@@ -100,6 +100,8 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
+
 export default {
   name: 'Accounts',
   props: {
@@ -108,59 +110,55 @@ export default {
       default: undefined,
     },
   },
-  data() {
-    return {
-      accountsRaw: [],
-      accounts: [],
-    };
-  },
-  watch: {
-    accountsRaw: {
-      handler() {
-        // this wouldn't be secure enough for prod => the accounts would have to be encrypted
-        // because localStorage is not a safe place to store private keys
-        window.localStorage.setItem(
-          'accounts',
-          JSON.stringify(this.accountsRaw)
-        );
-
-        // get balance from blockchain for each account
-        this.accounts = [...this.accountsRaw];
-
-        this.accounts.forEach((account) => {
-          this.web3.eth.getBalance(account.address, (err, wei) => {
-            account.balance = Number.parseFloat(
-              this.web3.utils.fromWei(wei, 'ether')
-            ).toPrecision(2);
-          });
-        });
-      },
-      deep: true,
-    },
+  computed: {
+    ...mapGetters('accounts', {
+      accounts: 'all',
+      totalAccounts: 'total',
+      getAccountByAddress: 'getByAddress',
+    }),
   },
   created() {
-    if (window.localStorage.getItem('accounts')) {
-      this.accountsRaw = JSON.parse(window.localStorage.getItem('accounts'));
-    }
+    this.accounts.forEach((account) => {
+      this.web3.eth.getBalance(account.address, (err, wei) => {
+        this.$store.commit({
+          type: 'accounts/updateAccountBalance',
+          accountAddress: account.address,
+          accountBalance: Number.parseFloat(
+            this.web3.utils.fromWei(wei, 'ether')
+          ).toPrecision(2),
+        });
+      });
+    });
   },
   methods: {
     addAccount() {
       const newAccount = this.web3.eth.accounts.create();
-      newAccount.name = `My Account ${this.accountsRaw.length + 1}`;
-      this.accountsRaw = [...this.accountsRaw, newAccount];
+      newAccount.name = `My Account ${this.totalAccounts + 1}`;
+
+      this.web3.eth.getBalance(newAccount.address, (err, wei) => {
+        newAccount.balance = Number.parseFloat(
+          this.web3.utils.fromWei(wei, 'ether')
+        ).toPrecision(2);
+
+        this.$store.commit({
+          type: 'accounts/addAccount',
+          newAccount: newAccount,
+        });
+      });
     },
-    removeAccount(clickedIndex) {
+    removeAccount(address) {
       if (
         window.confirm('Are you sure? You will loose access to your funds.')
       ) {
-        this.accountsRaw = this.accountsRaw.filter(
-          (account, accountIndex) => accountIndex !== clickedIndex
-        );
+        this.$store.commit({
+          type: 'accounts/removeAccount',
+          accountAddress: address,
+        });
       }
     },
-    sendFromAccount(clickedIndex) {
+    sendFromAccount(address) {
       this.$emit('newTransactionRequested', {
-        account: this.accountsRaw[clickedIndex],
+        account: this.getAccountByAddress(address),
       });
     },
   },
