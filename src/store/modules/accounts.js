@@ -25,7 +25,7 @@ const getters = {
 const actions = {
   createAccount({ getters, commit }) {
     const newAccount = web3.eth.accounts.create();
-    newAccount.name = `My Account ${getters.total + 1}`;
+    newAccount.name = `My Account #${getters.total + 1}`;
 
     web3.eth.getBalance(newAccount.address, (err, wei) => {
       newAccount.balance = Number.parseFloat(
