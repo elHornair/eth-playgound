@@ -1,6 +1,6 @@
 <template>
   <div class="box">
-    <h2 class="box__title">My Accounts</h2>
+    <h1 class="box__title">My Accounts</h1>
 
     <ul role="list" class="-my-6 divide-y divide-gray-200">
       <li

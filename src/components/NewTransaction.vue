@@ -1,6 +1,6 @@
 <template>
   <div class="box">
-    <h2 class="box__title">New Transaction</h2>
+    <h1 class="box__title">New Transaction</h1>
 
     <form action="#" method="POST" @submit.prevent="handleFormSubmit">
       <div class="grid grid-cols-6 gap-6">
@@ -59,7 +59,7 @@
             mr-2
             bg-white
             py-2
-            px-3
+            px-5
             border border-gray-300
             rounded-md
             shadow-sm
@@ -86,8 +86,8 @@
             bg-indigo-600
             border border-transparent
             rounded-md
-            py-3
-            px-8
+            py-2
+            px-5
             flex
             items-center
             justify-center

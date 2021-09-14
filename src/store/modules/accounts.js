@@ -49,7 +49,9 @@ const mutations = {
       (account) => account.address !== payload.accountAddress
     );
   },
-  updateAccountBalance(state, payload) {
+  updateAccountBalances(state, payload) {
+    // TODO: is this ever called? => lol no. but it should. From Accounts.vue on init or something
+    console.log('hello balance world');
     state.all = state.all.map((account) => {
       if (account.address === payload.accountAddress) {
         account.balance = payload.accountBalance;
