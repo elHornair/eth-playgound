@@ -38,6 +38,22 @@ const actions = {
       });
     });
   },
+  updateAccountBalancesFromBlockchain({ getters, dispatch }) {
+    getters.all.forEach((account) => {
+      dispatch('updateAccountBalanceFromBlockchain', account);
+    });
+  },
+  updateAccountBalanceFromBlockchain({ commit }, account) {
+    web3.eth.getBalance(account.address, (err, wei) => {
+      commit({
+        type: 'updateAccountBalance',
+        accountAddress: account.address,
+        accountBalance: Number.parseFloat(
+          web3.utils.fromWei(wei, 'ether')
+        ).toPrecision(2),
+      });
+    });
+  },
 };
 
 const mutations = {
@@ -49,9 +65,7 @@ const mutations = {
       (account) => account.address !== payload.accountAddress
     );
   },
-  updateAccountBalances(state, payload) {
-    // TODO: is this ever called? => lol no. but it should. From Accounts.vue on init or something
-    console.log('hello balance world');
+  updateAccountBalance(state, payload) {
     state.all = state.all.map((account) => {
       if (account.address === payload.accountAddress) {
         account.balance = payload.accountBalance;

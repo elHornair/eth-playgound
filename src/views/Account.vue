@@ -272,6 +272,10 @@ export default {
   },
   created() {
     this.account = this.getAccountByAddress(this.$route.params.address);
+    this.$store.dispatch(
+      'accounts/updateAccountBalancesFromBlockchain',
+      this.account
+    );
   },
 };
 </script>

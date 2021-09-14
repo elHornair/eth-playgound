@@ -111,6 +111,11 @@ export default {
       getAccountByAddress: 'getByAddress',
     }),
   },
+  created() {
+    this.$store.dispatch({
+      type: 'accounts/updateAccountBalancesFromBlockchain',
+    });
+  },
   methods: {
     addAccount() {
       this.$store.dispatch({ type: 'accounts/createAccount' });
