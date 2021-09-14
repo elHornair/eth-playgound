@@ -1,16 +1,20 @@
 <template>
   <div>
-    <div class="flex justify-center transform translate-y-3/4 -mt-28">
+    <div class="flex justify-end mt-12 w-2/4 h-0">
       <div
         class="
           flex-shrink-0
-          w-36
-          h-36
+          w-24
+          h-24
+          sm:w-36 sm:h-36
           border border-gray-200
           rounded-full
           overflow-hidden
           border-gray-200
           shadow
+          transform
+          translate-x-2/4
+          -translate-y-1/4
         "
       >
         <img
@@ -22,9 +26,78 @@
     </div>
 
     <div class="box overflow-visible">
-      <div class="text-center mt-28 mb-8">
-        <h1 class="box__title">{{ account.name }}</h1>
-        <span class="block text-sm text-gray-500 -mt-7">
+      <div class="flex justify-end">
+        <button
+          type="button"
+          class="font-medium text-indigo-600 hover:text-indigo-500"
+          :class="{ hidden: editing }"
+          @click="handleEditClick"
+        >
+          Edit
+        </button>
+        <button
+          type="button"
+          class="font-medium text-indigo-600 hover:text-indigo-500"
+          :class="{ hidden: !editing }"
+          @click="handleEditAbortClick"
+        >
+          Abort
+        </button>
+        <button
+          type="button"
+          class="
+            bg-indigo-600
+            border border-transparent
+            rounded-md
+            py-1
+            px-2
+            flex
+            items-center
+            justify-center
+            text-base
+            font-medium
+            text-white
+            hover:bg-indigo-700
+            focus:outline-none
+            focus:ring-2
+            focus:ring-offset-2
+            focus:ring-indigo-500
+            text-center
+            ml-2
+            -mt-2
+            -mb-1
+          "
+          :class="{ hidden: !editing }"
+          @click="handleEditSafe"
+        >
+          Save
+        </button>
+      </div>
+      <div class="mt-12 sm:mt-24 flex justify-center">
+        <h1
+          v-if="editing"
+          ref="accountNameTemp"
+          class="
+            bg-gray-100
+            border-transparent
+            focus:border-gray-500 focus:bg-white focus:ring-0
+            px-3
+            py-1
+            -my-1
+            text-2xl
+          "
+          contenteditable
+          @keypress.enter="handleEditSafe"
+        >
+          {{ account.name }}
+        </h1>
+        <h1 v-else class="text-2xl">
+          {{ account.name }}
+        </h1>
+      </div>
+
+      <div class="text-center">
+        <span class="block text-sm text-gray-500 mt-2">
           {{ account.address }}
         </span>
         <span
@@ -41,7 +114,8 @@
           {{ account.balance }} ETH
         </span>
       </div>
-      <div class="flex justify-center mb-8">
+
+      <div class="flex justify-center mt-7 mb-8">
         <button
           type="button"
           class="
@@ -230,6 +304,7 @@ export default {
   data() {
     return {
       account: undefined,
+      editing: false,
       transactions: [
         // TODO: get this from the blockchain instead of using dummy data
         {
@@ -276,6 +351,33 @@ export default {
       'accounts/updateAccountBalancesFromBlockchain',
       this.account
     );
+  },
+  methods: {
+    handleEditClick() {
+      this.editing = true;
+
+      window.requestAnimationFrame(() => {
+        const $accountNameEl = this.$refs.accountNameTemp;
+
+        $accountNameEl.focus();
+
+        window
+          .getSelection()
+          .collapse($accountNameEl.firstChild, $accountNameEl.innerText.length);
+      });
+    },
+    handleEditAbortClick() {
+      this.editing = false;
+    },
+    handleEditSafe() {
+      this.$store.commit({
+        type: 'accounts/updateAccountName',
+        address: this.account.address,
+        name: this.$refs.accountNameTemp.innerText,
+      });
+
+      this.editing = false;
+    },
   },
 };
 </script>

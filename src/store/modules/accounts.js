@@ -74,6 +74,15 @@ const mutations = {
       return account;
     });
   },
+  updateAccountName(state, payload) {
+    state.all = state.all.map((account) => {
+      if (account.address === payload.address) {
+        account.name = payload.name;
+      }
+
+      return account;
+    });
+  },
 };
 
 export default {
