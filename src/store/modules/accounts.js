@@ -47,8 +47,8 @@ const actions = {
     web3.eth.getBalance(account.address, (err, wei) => {
       commit({
         type: 'updateAccountBalance',
-        accountAddress: account.address,
-        accountBalance: Number.parseFloat(
+        address: account.address,
+        balance: Number.parseFloat(
           web3.utils.fromWei(wei, 'ether')
         ).toPrecision(2),
       });
@@ -67,8 +67,8 @@ const mutations = {
   },
   updateAccountBalance(state, payload) {
     state.all = state.all.map((account) => {
-      if (account.address === payload.accountAddress) {
-        account.balance = payload.accountBalance;
+      if (account.address === payload.address) {
+        account.balance = payload.balance;
       }
 
       return account;
