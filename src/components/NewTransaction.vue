@@ -2,7 +2,7 @@
   <div class="box">
     <h1 class="box__title">New Transaction</h1>
 
-    <form action="#" method="POST" @submit.prevent="handleFormSubmit">
+    <form @submit.prevent="handleFormSubmit">
       <div class="grid grid-cols-6 gap-6">
         <div class="col-span-6">
           <label for="recipient" class="block text-sm font-medium text-gray-700"
