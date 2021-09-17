@@ -161,13 +161,43 @@
             focus:ring-indigo-500
             text-center
           "
-          @click="handleSendClick()"
+          @click="handleSendClick"
         >
           Send
         </button>
       </div>
 
       <TransactionList class="mt-4 mb-2"> </TransactionList>
+
+      <div class="flex justify-end">
+        <button
+          type="button"
+          class="
+            mt-8
+            float-right
+            bg-red-600
+            border border-transparent
+            rounded-md
+            py-3
+            px-8
+            flex
+            items-center
+            justify-center
+            text-base
+            font-medium
+            text-white
+            hover:bg-red-700
+            focus:outline-none
+            focus:ring-2
+            focus:ring-offset-2
+            focus:ring-red-500
+            -mr-2
+          "
+          @click="handleRemoveAccountClick"
+        >
+          Delete
+        </button>
+      </div>
     </div>
   </div>
 </template>
@@ -229,6 +259,26 @@ export default {
       this.$emit('newTransactionRequested', {
         account: this.getAccountByAddress(this.account.address),
       });
+    },
+    handleRemoveAccountClick() {
+      if (
+        window.confirm('Are you sure? You will loose access to your funds.')
+      ) {
+        console.log('before the commit');
+        // TODO: only soft delete
+        this.$store.commit({
+          type: 'accounts/removeAccount',
+          accountAddress: this.account.address,
+        });
+
+        console.log('after the commit');
+
+        window.alert(
+          'Account deleted. You will be redirected to the accounts page now.'
+        );
+
+        this.$router.push({ name: 'accounts' });
+      }
     },
   },
 };

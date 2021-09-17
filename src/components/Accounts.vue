@@ -46,16 +46,14 @@
               {{ account.address }}
             </p>
           </div>
-          <div class="flex-1 flex items-end justify-between text-sm">
-            <div class="flex">
-              <button
-                type="button"
-                class="font-medium text-indigo-600 hover:text-indigo-500"
-                @click="removeAccount(account.address)"
-              >
-                Remove
-              </button>
-            </div>
+          <div class="flex-1 flex items-end justify-end text-sm">
+            <button
+              type="button"
+              class="font-medium text-indigo-600 hover:text-indigo-500"
+              @click="handleDetailsClick(account.address)"
+            >
+              Details
+            </button>
           </div>
         </div>
       </li>
@@ -82,6 +80,7 @@
         focus:ring-2
         focus:ring-offset-2
         focus:ring-indigo-500
+        -mr-2
       "
       @click="addAccount"
     >
@@ -111,15 +110,8 @@ export default {
     addAccount() {
       this.$store.dispatch({ type: 'accounts/createAccount' });
     },
-    removeAccount(address) {
-      if (
-        window.confirm('Are you sure? You will loose access to your funds.')
-      ) {
-        this.$store.commit({
-          type: 'accounts/removeAccount',
-          accountAddress: address,
-        });
-      }
+    handleDetailsClick(address) {
+      this.$router.push({ name: 'account', params: { address: address } });
     },
   },
 };
