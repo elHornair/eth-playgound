@@ -36,7 +36,7 @@
 import ERC20Box from '@/components/ERC20Box';
 
 export default {
-  name: 'Home',
+  name: 'HomeView',
   components: {
     ERC20Box,
   },
