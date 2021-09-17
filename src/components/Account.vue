@@ -161,6 +161,7 @@
             focus:ring-indigo-500
             text-center
           "
+          @click="handleSendClick()"
         >
           Send
         </button>
@@ -223,6 +224,11 @@ export default {
       });
 
       this.editing = false;
+    },
+    handleSendClick() {
+      this.$emit('newTransactionRequested', {
+        account: this.getAccountByAddress(this.account.address),
+      });
     },
   },
 };

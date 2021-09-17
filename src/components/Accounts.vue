@@ -51,7 +51,6 @@
               <button
                 type="button"
                 class="font-medium text-indigo-600 hover:text-indigo-500"
-                @click="sendFromAccount(account.address)"
               >
                 Send
               </button>
@@ -129,11 +128,6 @@ export default {
           accountAddress: address,
         });
       }
-    },
-    sendFromAccount(address) {
-      this.$emit('newTransactionRequested', {
-        account: this.getAccountByAddress(address),
-      });
     },
   },
 };
