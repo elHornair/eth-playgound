@@ -14,7 +14,7 @@ import Accounts from '@/components/Accounts';
 import NewTransaction from '@/components/NewTransaction';
 
 export default {
-  name: 'Main',
+  name: 'AccountsView',
   components: {
     Accounts,
     NewTransaction,
