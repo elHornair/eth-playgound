@@ -47,14 +47,6 @@
             </p>
           </div>
           <div class="flex-1 flex items-end justify-between text-sm">
-            <p class="text-gray-500">
-              <button
-                type="button"
-                class="font-medium text-indigo-600 hover:text-indigo-500"
-              >
-                Send
-              </button>
-            </p>
             <div class="flex">
               <button
                 type="button"
