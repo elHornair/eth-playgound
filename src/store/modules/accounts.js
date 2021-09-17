@@ -61,6 +61,7 @@ const mutations = {
     state.all = [...state.all, payload.newAccount];
   },
   removeAccount(state, payload) {
+    // TODO: only soft delete
     state.all = state.all.filter(
       (account) => account.address !== payload.accountAddress
     );

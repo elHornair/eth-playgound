@@ -264,14 +264,10 @@ export default {
       if (
         window.confirm('Are you sure? You will loose access to your funds.')
       ) {
-        console.log('before the commit');
-        // TODO: only soft delete
         this.$store.commit({
           type: 'accounts/removeAccount',
           accountAddress: this.account.address,
         });
-
-        console.log('after the commit');
 
         window.alert(
           'Account deleted. You will be redirected to the accounts page now.'
