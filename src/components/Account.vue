@@ -167,7 +167,7 @@
         </button>
       </div>
 
-      <TransactionList class="mt-4 mb-2"> </TransactionList>
+      <TransactionList class="mt-4 mb-2" :account="account"> </TransactionList>
 
       <div class="flex justify-end">
         <button

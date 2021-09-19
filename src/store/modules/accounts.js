@@ -1,4 +1,5 @@
 import Web3 from 'web3';
+import { ethers } from 'ethers';
 
 const web3 = new Web3(
   new Web3.providers.HttpProvider(
@@ -20,6 +21,38 @@ const getters = {
   getByAddress: (state) => (address) => {
     return state.all.find((account) => account.address === address);
   },
+  getFormattedTransactions: (state) => (address) => {
+    const account = state.all.find((account) => account.address === address);
+
+    if (!account || !account.transactions) {
+      return [];
+    }
+
+    return account.transactions.map((transaction) => {
+      const transactionOutgoing = transaction.from === address;
+
+      const transactionDate = new Date(transaction.timestamp * 1000); // ethereum uses seconds, but JS wants milliseconds
+
+      return {
+        hash: transaction.hash,
+        time: `${('0' + transactionDate.getHours()).slice(-2)}:${(
+          '0' + transactionDate.getMinutes()
+        ).slice(-2)}`,
+        date: `${('0' + transactionDate.getDate()).slice(-2)}.${(
+          '0' +
+          (transactionDate.getMonth() + 1)
+        ).slice(-2)}.${transactionDate.getFullYear()}`,
+        value: (
+          ethers.utils.formatEther(transaction.value) *
+          (transactionOutgoing ? -1 : 1)
+        ).toFixed(6),
+        account: {
+          name: 'Unknown', // TODO: lookup in address book and/or ENS
+          address: transactionOutgoing ? transaction.to : transaction.from,
+        },
+      };
+    });
+  },
 };
 
 const actions = {
@@ -30,7 +63,7 @@ const actions = {
     web3.eth.getBalance(newAccount.address, (err, wei) => {
       newAccount.balance = Number.parseFloat(
         web3.utils.fromWei(wei, 'ether')
-      ).toPrecision(2);
+      ).toPrecision(2); // TODO: this should store wei
 
       commit({
         type: 'addAccount',
@@ -50,8 +83,25 @@ const actions = {
         address: account.address,
         balance: Number.parseFloat(
           web3.utils.fromWei(wei, 'ether')
-        ).toPrecision(2),
+        ).toPrecision(2), // TODO: this should store wei
       });
+    });
+  },
+  async updateAccountTransactionsFromBlockchain({ commit }, account) {
+    const history = await provider.getHistory(account.address);
+
+    commit({
+      type: 'updateAccountTransactions',
+      address: account.address,
+      transactions: history.map((transaction) => {
+        return {
+          hash: transaction.hash,
+          from: transaction.from,
+          to: transaction.to,
+          value: transaction.value,
+          timestamp: transaction.timestamp,
+        };
+      }),
     });
   },
 };
@@ -70,6 +120,17 @@ const mutations = {
     state.all = state.all.map((account) => {
       if (account.address === payload.address) {
         account.balance = payload.balance;
+      }
+
+      return account;
+    });
+  },
+  updateAccountTransactions(state, payload) {
+    state.all = state.all.map((account) => {
+      if (account.address === payload.address) {
+        account.transactions = payload.transactions.sort((a, b) => {
+          return b.timestamp - a.timestamp;
+        });
       }
 
       return account;

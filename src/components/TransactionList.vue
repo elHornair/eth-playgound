@@ -63,7 +63,7 @@
                 </tr>
               </thead>
               <tbody class="bg-white divide-y divide-gray-200">
-                <tr v-for="transaction in transactions" :key="transaction.id">
+                <tr v-for="transaction in transactions" :key="transaction.hash">
                   <td class="px-6 py-4 whitespace-nowrap">
                     <div class="text-sm text-gray-900">
                       {{ transaction.time }}
@@ -99,7 +99,7 @@
                       text-sm text-gray-500 text-right
                     "
                   >
-                    {{ transaction.amount }} ETH
+                    {{ transaction.value }} ETH
                   </td>
                   <td
                     class="
@@ -111,7 +111,7 @@
                     "
                   >
                     <a
-                      :href="`https://kovan.etherscan.io/tx/${transaction.id}`"
+                      :href="`https://kovan.etherscan.io/tx/${transaction.hash}`"
                       class="text-indigo-600 hover:text-indigo-900"
                       >Details</a
                     >
@@ -127,44 +127,33 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
+
 export default {
   name: 'TransactionList',
+  props: {
+    account: undefined,
+  },
+  computed: {
+    ...mapGetters('accounts', {
+      getFormattedTransactions: 'getFormattedTransactions',
+    }),
+  },
   data() {
     return {
-      transactions: [
-        // TODO: get this from the blockchain instead of using dummy data
-        {
-          id: '0xe07b6124d04608f5c6a946e54311da41ca78cd2714a523d2e6b6d2be6723f416',
-          time: '13:42',
-          date: '06.04.2021',
-          account: {
-            name: 'Unknown',
-            address: '0x99371827EA20eFC38a16Ca4841c14185c4a89dBA',
-          },
-          amount: '-0.00001',
-        },
-        {
-          id: '0x99d27124d04608f5c6a946e54311da41ca78cd2714a523d2e6b6d2be6723f416',
-          time: '06:11',
-          date: '02.01.2021',
-          account: {
-            name: 'Moxie Marlinspike',
-            address: '0xkd83b227EA20eFC38a16Ca4841c14185c4a89dBA',
-          },
-          amount: '0.0002',
-        },
-        {
-          id: '0xk842b524d04608f5c6a946e54311da41ca78cd2714a523d2e6b6d2be6723f416',
-          time: '20:44',
-          date: '06.12.2020',
-          account: {
-            name: 'John Doe',
-            address: '0x8s921027EA20eFC38a16Ca4841c14185c4a89dBA',
-          },
-          amount: '-0.00002',
-        },
-      ],
+      transactions: [],
     };
+  },
+  created() {
+    this.$store.dispatch(
+      'accounts/updateAccountTransactionsFromBlockchain',
+      this.account
+    );
+
+    this.transactions = this.getFormattedTransactions(this.account.address);
+    // TODO: add a nice arrow that indicates if transaction is outgoing or incoming
+    // TODO: date should be bold, time should not be bold I think
+    // TODO: do something nice where today's date is displayed as "today" etc? same with time? -> library?
   },
 };
 </script>
