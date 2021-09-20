@@ -134,15 +134,15 @@ export default {
   props: {
     account: undefined,
   },
-  computed: {
-    ...mapGetters('accounts', {
-      getFormattedTransactions: 'getFormattedTransactions',
-    }),
-  },
   data() {
     return {
       transactions: [],
     };
+  },
+  computed: {
+    ...mapGetters('accounts', {
+      getFormattedTransactions: 'getFormattedTransactions',
+    }),
   },
   created() {
     this.$store.dispatch(
