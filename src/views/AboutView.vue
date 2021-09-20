@@ -26,10 +26,11 @@
         <a href="https://ethereum.org">Ethereum</a>
         blockchain. I started out with
         <a href="https://web3js.readthedocs.io/">web3.js</a> but then switched
-        to <a href="https://docs.ethers.io/">ethers</a> because it allows to use
-        <a href="https://etherscan.io/">Etherscan</a> as a provider and
+        to <a href="https://docs.ethers.io/">ethers.js</a> because it allows to
+        use <a href="https://etherscan.io/">Etherscan</a> as a provider and
         Etherscan provides a simple API for getting all transactions an account
-        was involved in. Also, ethers feels a lot more intuitive than web3.js.
+        was involved in. Also, ethers.js feels a lot more intuitive than
+        web3.js.
       </p>
     </div>
   </div>
