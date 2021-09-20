@@ -20,11 +20,9 @@
         Welcome Home
       </p>
       <p class="link-container mt-4 max-w-2xl text-xl text-gray-500 lg:mx-auto">
-        This is a playground project created by
-        <a href="https://twitter.com/elHornair">@elHornair</a> for getting used
-        with <a href="https://web3js.readthedocs.io/">web3.js</a> and the
-        <a href="https://ethereum.org">Ethereum</a>
-        blockchain.
+        See this box below? It gets it's information from the Ethereum
+        blockchain. You can also create an account and send around some fake
+        ETH.
       </p>
     </div>
 
