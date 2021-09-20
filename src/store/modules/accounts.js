@@ -1,11 +1,4 @@
-import Web3 from 'web3';
 import { ethers } from 'ethers';
-
-const web3 = new Web3(
-  new Web3.providers.HttpProvider(
-    'https://kovan.infura.io/v3/39009bec93694f98947fdfb1cffb2e30'
-  )
-);
 
 const provider = new ethers.providers.EtherscanProvider(
   'kovan',
@@ -18,10 +11,22 @@ const state = () => ({
 
 const getters = {
   all(state) {
+    // TODO: replace this, use state directly
     return state.all;
   },
-  total(state, getters) {
-    return getters.all.length;
+  allFormatted(state) {
+    return state.all.map((account) => {
+      const accountFormatted = { ...account };
+
+      accountFormatted.balance = Number.parseFloat(
+        ethers.utils.formatEther(account.balance)
+      ).toFixed(6);
+
+      return accountFormatted;
+    });
+  },
+  total(state) {
+    return state.all.length;
   },
   getByAddress: (state) => (address) => {
     return state.all.find((account) => account.address === address);
@@ -35,7 +40,6 @@ const getters = {
 
     return account.transactions.map((transaction) => {
       const transactionOutgoing = transaction.from === address;
-
       const transactionDate = new Date(transaction.timestamp * 1000); // ethereum uses seconds, but JS wants milliseconds
 
       return {
@@ -62,34 +66,27 @@ const getters = {
 
 const actions = {
   createAccount({ getters, commit }) {
-    const newAccount = web3.eth.accounts.create();
+    const newAccount = ethers.Wallet.createRandom();
     newAccount.name = `My Account #${getters.total + 1}`;
+    newAccount.balance = 0;
 
-    web3.eth.getBalance(newAccount.address, (err, wei) => {
-      newAccount.balance = Number.parseFloat(
-        web3.utils.fromWei(wei, 'ether')
-      ).toPrecision(2); // TODO: this should store wei
-
-      commit({
-        type: 'addAccount',
-        newAccount: newAccount,
-      });
+    commit({
+      type: 'addAccount',
+      newAccount: newAccount,
     });
   },
-  updateAccountBalancesFromBlockchain({ getters, dispatch }) {
-    getters.all.forEach((account) => {
+  updateAccountBalancesFromBlockchain({ state, dispatch }) {
+    state.all.forEach((account) => {
       dispatch('updateAccountBalanceFromBlockchain', account);
     });
   },
-  updateAccountBalanceFromBlockchain({ commit }, account) {
-    web3.eth.getBalance(account.address, (err, wei) => {
-      commit({
-        type: 'updateAccountBalance',
-        address: account.address,
-        balance: Number.parseFloat(
-          web3.utils.fromWei(wei, 'ether')
-        ).toPrecision(2), // TODO: this should store wei
-      });
+  async updateAccountBalanceFromBlockchain({ commit }, account) {
+    const balance = await provider.getBalance(account.address);
+
+    commit({
+      type: 'updateAccountBalance',
+      address: account.address,
+      balance: balance,
     });
   },
   async updateAccountTransactionsFromBlockchain({ commit }, account) {

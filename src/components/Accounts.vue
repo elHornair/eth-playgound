@@ -38,9 +38,7 @@
                   >{{ account.name }}</router-link
                 >
               </h3>
-              <p v-if="account.balance" class="ml-4">
-                {{ account.balance }} ETH
-              </p>
+              <p class="ml-4">{{ account.balance }} ETH</p>
             </div>
             <p class="mt-1 text-sm text-gray-500">
               {{ account.address }}
@@ -96,7 +94,7 @@ export default {
   name: 'Accounts',
   computed: {
     ...mapGetters('accounts', {
-      accounts: 'all',
+      accounts: 'allFormatted',
       totalAccounts: 'total',
       getAccountByAddress: 'getByAddress',
     }),
