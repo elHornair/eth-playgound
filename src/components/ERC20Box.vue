@@ -11,7 +11,12 @@
 </template>
 
 <script>
-import Web3 from 'web3';
+import { ethers } from 'ethers';
+
+const provider = new ethers.providers.EtherscanProvider(
+  'kovan',
+  process.env.VUE_APP_ETHERSCAN_API_KEY
+);
 
 const erc20Abi = [
   {
@@ -222,31 +227,29 @@ export default {
   },
   data() {
     return {
-      web3: undefined,
+      smartContract: undefined,
       tokenName: '',
       tokenSymbol: '',
       tokenTotalSupply: '',
     };
   },
   created() {
-    this.web3 = new Web3(
-      new Web3.providers.HttpProvider(
-        'https://kovan.infura.io/v3/39009bec93694f98947fdfb1cffb2e30'
-      )
-    );
+    this.smartContract = new ethers.Contract(this.address, erc20Abi, provider);
 
-    const smartContract = new this.web3.eth.Contract(erc20Abi, this.address);
-
-    // get all methods: console.log(smartContract.methods);
-    smartContract.methods
-      .name()
-      .call((err, result) => (this.tokenName = result));
-    smartContract.methods
-      .symbol()
-      .call((err, result) => (this.tokenSymbol = result));
-    smartContract.methods
-      .totalSupply()
-      .call((err, result) => (this.tokenTotalSupply = result));
+    this.updateTokenName();
+    this.updateTokenSymbol();
+    this.updateTokenTotalSupply();
+  },
+  methods: {
+    async updateTokenName() {
+      this.tokenName = await this.smartContract.name();
+    },
+    async updateTokenSymbol() {
+      this.tokenSymbol = await this.smartContract.symbol();
+    },
+    async updateTokenTotalSupply() {
+      this.tokenTotalSupply = await this.smartContract.totalSupply();
+    },
   },
 };
 </script>
