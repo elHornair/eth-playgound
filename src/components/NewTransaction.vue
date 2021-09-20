@@ -109,7 +109,12 @@
 </template>
 
 <script>
-import Web3 from 'web3';
+import { ethers } from 'ethers';
+
+const provider = new ethers.providers.EtherscanProvider(
+  'kovan',
+  process.env.VUE_APP_ETHERSCAN_API_KEY
+);
 
 export default {
   name: 'NewTransaction',
@@ -129,62 +134,42 @@ export default {
   },
   data() {
     return {
-      web3: undefined,
       recipient: '',
       amount: 0,
     };
-  },
-  created() {
-    this.web3 = new Web3(
-      new Web3.providers.HttpProvider(
-        'https://kovan.infura.io/v3/39009bec93694f98947fdfb1cffb2e30'
-      )
-    );
   },
   methods: {
     handleAbort() {
       this.$emit('newTransactionFinished');
     },
     async handleFormSubmit() {
-      const nonce = await this.web3.eth.getTransactionCount(
-        this.address,
-        'latest'
-      );
+      const wallet = new ethers.Wallet(this.privateKey);
+      const signer = wallet.connect(provider);
 
-      const transaction = {
-        to: this.recipient,
-        value: this.web3.utils.toWei(this.amount.toString(10), 'ether'),
-        gas: 21000,
-        nonce: nonce,
-      };
+      try {
+        const tx = await signer.sendTransaction({
+          from: this.address,
+          to: this.recipient,
+          value: ethers.utils.parseEther(this.amount.toString(10)),
+          nonce: provider.getTransactionCount(this.address, 'latest'),
+        });
 
-      const signedTx = await this.web3.eth.accounts.signTransaction(
-        transaction,
-        this.privateKey
-      );
-
-      this.web3.eth.sendSignedTransaction(
-        signedTx.rawTransaction,
-        (error, hash) => {
-          if (!error) {
-            console.log(
-              `Transaction sent. Check it here: https://kovan.etherscan.io/tx/${hash}`
-            );
-            alert(
-              `Transaction sent. Check it here: https://kovan.etherscan.io/tx/${hash}`
-            );
-            this.$emit('newTransactionFinished');
-          } else {
-            console.log(
-              'Something went wrong while submitting your transaction:',
-              error
-            );
-            alert(
-              `Something went wrong while submitting your transaction: ${error.toString()}`
-            );
-          }
-        }
-      );
+        console.log(
+          `Transaction sent. Check it here: https://kovan.etherscan.io/tx/${tx.hash}`
+        );
+        alert(
+          `Transaction sent. Check it here: https://kovan.etherscan.io/tx/${tx.hash}`
+        );
+        this.$emit('newTransactionFinished');
+      } catch (error) {
+        console.log(
+          'Something went wrong while submitting your transaction:',
+          error
+        );
+        alert(
+          `Something went wrong while submitting your transaction: ${error.toString()}`
+        );
+      }
     },
   },
 };
