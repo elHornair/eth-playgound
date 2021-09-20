@@ -28,8 +28,8 @@ const getters = {
   total(state) {
     return state.all.length;
   },
-  getByAddress: (state) => (address) => {
-    return state.all.find((account) => account.address === address);
+  getFormattedByAddress: (state, getters) => (address) => {
+    return getters.allFormatted.find((account) => account.address === address);
   },
   getFormattedTransactions: (state) => (address) => {
     const account = state.all.find((account) => account.address === address);

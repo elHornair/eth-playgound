@@ -219,11 +219,13 @@ export default {
   },
   computed: {
     ...mapGetters('accounts', {
-      getAccountByAddress: 'getByAddress',
+      getFormattedAccountByAddress: 'getFormattedByAddress',
     }),
   },
   created() {
-    this.account = this.getAccountByAddress(this.$route.params.address);
+    this.account = this.getFormattedAccountByAddress(
+      this.$route.params.address
+    );
     this.$store.dispatch(
       'accounts/updateAccountBalanceFromBlockchain',
       this.account
@@ -257,7 +259,7 @@ export default {
     },
     handleSendClick() {
       this.$emit('newTransactionRequested', {
-        account: this.getAccountByAddress(this.account.address),
+        account: this.getFormattedAccountByAddress(this.account.address),
       });
     },
     handleRemoveAccountClick() {
