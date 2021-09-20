@@ -119,10 +119,6 @@ const provider = new ethers.providers.EtherscanProvider(
 export default {
   name: 'NewTransaction',
   props: {
-    name: {
-      type: String,
-      default: undefined,
-    },
     address: {
       type: String,
       default: undefined,

@@ -96,7 +96,6 @@ export default {
     ...mapGetters('accounts', {
       accounts: 'allFormatted',
       totalAccounts: 'total',
-      getAccountByAddress: 'getByAddress',
     }),
   },
   created() {
