@@ -65,10 +65,10 @@
               <tbody class="bg-white divide-y divide-gray-200">
                 <tr v-for="transaction in transactions" :key="transaction.hash">
                   <td class="px-6 py-4 whitespace-nowrap">
-                    <div class="text-sm text-gray-900">
+                    <div class="text-sm text-gray-500">
                       {{ transaction.time }}
                     </div>
-                    <div class="text-sm text-gray-500">
+                    <div class="text-sm text-gray-900">
                       {{ transaction.date }}
                     </div>
                   </td>
@@ -85,7 +85,7 @@
                         <div class="text-sm font-medium text-gray-900">
                           {{ transaction.account.name }}
                         </div>
-                        <div class="text-sm text-gray-500 w-36 truncate">
+                        <div class="text-sm text-gray-500 w-28 truncate">
                           {{ transaction.account.address }}
                         </div>
                       </div>
@@ -151,9 +151,6 @@ export default {
     );
 
     this.transactions = this.getFormattedTransactions(this.account.address);
-    // TODO: add a nice arrow that indicates if transaction is outgoing or incoming
-    // TODO: date should be bold, time should not be bold I think
-    // TODO: do something nice where today's date is displayed as "today" etc? same with time? -> library?
   },
 };
 </script>
