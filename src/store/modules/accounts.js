@@ -7,6 +7,11 @@ const web3 = new Web3(
   )
 );
 
+const provider = new ethers.providers.EtherscanProvider(
+  'kovan',
+  process.env.VUE_APP_ETHERSCAN_API_KEY
+);
+
 const state = () => ({
   all: [],
 });
