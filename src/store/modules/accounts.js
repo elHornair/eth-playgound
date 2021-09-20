@@ -10,10 +10,6 @@ const state = () => ({
 });
 
 const getters = {
-  all(state) {
-    // TODO: replace this, use state directly
-    return state.all;
-  },
   allFormatted(state) {
     return state.all.map((account) => {
       const accountFormatted = { ...account };
