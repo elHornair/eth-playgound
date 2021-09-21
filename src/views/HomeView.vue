@@ -26,17 +26,20 @@
       </p>
     </div>
 
+    <PetBox></PetBox>
     <ERC20Box address="0xf894289f63b0b365485cee34aa50681f295f84b4"></ERC20Box>
   </div>
 </template>
 
 <script>
 import ERC20Box from '@/components/ERC20Box';
+import PetBox from '@/components/PetBox';
 
 export default {
   name: 'HomeView',
   components: {
     ERC20Box,
+    PetBox,
   },
   data() {
     return {
