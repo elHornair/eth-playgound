@@ -34,6 +34,9 @@
 import { ethers } from 'ethers';
 import { mapGetters } from 'vuex';
 
+import { SigningKeychain } from '@radixdlt/account';
+import { Mnemonic } from '@radixdlt/crypto';
+
 const provider = new ethers.providers.EtherscanProvider(
   'kovan',
   process.env.VUE_APP_ETHERSCAN_API_KEY
@@ -150,8 +153,31 @@ export default {
     );
 
     this.updateAdopters();
+
+    this.testRadix();
   },
   methods: {
+    async testRadix() {
+      const mnemonic = Mnemonic.generateNew();
+      const keystoreEncryptionPassword = 'some-pw';
+
+      SigningKeychain.byEncryptingMnemonicAndSavingKeystore({
+        mnemonic,
+        password: keystoreEncryptionPassword,
+        save: function (keystore) {
+          console.log('keystore:');
+          console.log(keystore);
+
+          return new Promise((resolve) => {
+            // TODO: write file here
+            resolve('okydokes');
+          });
+        },
+      }).andThen((signingKeyChain) => {
+        console.log('mnemonic:');
+        console.log(signingKeyChain.revealMnemonic());
+      });
+    },
     async updateAdopters() {
       this.adopters = await this.smartContractPets.getAdopters();
     },
